@@ -1,0 +1,1 @@
+Was the **McLean Professor of Ancient and Modern History** for the last 22 years of his 43 year academic carrier in the field of [[Intellectual (Western) History|Intellectual History]] of Mankind.
