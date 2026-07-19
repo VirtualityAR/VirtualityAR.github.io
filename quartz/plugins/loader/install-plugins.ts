@@ -1,10 +1,24 @@
 #!/usr/bin/env node
 import { installPlugins, parsePluginSource } from "./gitLoader.js"
-import config from "../../../quartz.js"
+import fs from "fs"
+import path from "path"
+import YAML from "yaml"
 
 async function main() {
-  const quartzConfig: any = config
-  const externalPlugins = quartzConfig.externalPlugins || []
+  const CONFIG_YAML_PATH = path.join(process.cwd(), "quartz.config.yaml")
+  const DEFAULT_CONFIG_YAML_PATH = path.join(process.cwd(), "quartz.config.default.yaml")
+  const configPath = fs.existsSync(CONFIG_YAML_PATH) ? CONFIG_YAML_PATH : DEFAULT_CONFIG_YAML_PATH
+
+  let externalPlugins = []
+  if (fs.existsSync(configPath)) {
+    try {
+      const raw = fs.readFileSync(configPath, "utf-8")
+      const config = YAML.parse(raw)
+      externalPlugins = config?.externalPlugins || []
+    } catch (err) {
+      console.warn("Failed to parse config file, trying fallback:", err)
+    }
+  }
 
   if (externalPlugins.length === 0) {
     console.log("No external plugins to install.")
